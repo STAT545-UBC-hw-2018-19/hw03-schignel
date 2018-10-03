@@ -1,0 +1,6 @@
+---
+title: "Homework 3"
+author: "Stephen Chignell"
+date: "October 2, 2018"
+output: github_document
+---
