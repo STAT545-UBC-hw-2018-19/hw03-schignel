@@ -196,7 +196,7 @@ ggplot(data = lexp, aes(x = year, y = mean.lexp))+
   ggtitle("Mean Life Expectancy by Continent (1952-2007)")
 ```
 
-![](hw03-schignel_files/figure-markdown_github/unnamed-chunk-2-1.png)
+![](hw03-schignel_files/figure-markdown_github/lexp_time-1.png)
 
 Here we see that on average, life expectancy has been increasing from 1952 to 2007. The one exception is Africa, which has remained relatively level from 1987 until a slight increase in 2007.
 

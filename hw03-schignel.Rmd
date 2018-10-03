@@ -28,7 +28,7 @@ GDPmm <- gapminder %>% # begin pipe and assign output to variable "GDP"
 ```
 
 **Display the results as a table**
-```{r results = 'asis'}
+```{r GDPmm table}
 knitr::kable(GDPmm)
 ```
 
@@ -100,7 +100,7 @@ knitr::kable(lexp)
 
   
 ```
-```{r}
+```{r lexp_time}
 ggplot(data = lexp, aes(x = year, y = mean.lexp))+
   geom_line(aes(color = continent))+
   geom_point(aes(color = continent))+
