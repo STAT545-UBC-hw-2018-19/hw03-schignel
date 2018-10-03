@@ -4,8 +4,11 @@ author: "Stephen Chignell"
 date: "October 2, 2018"
 output: github_document
 ---
+# Overview
+The following sections demonstrates the `tidyverse` and `ggplot2` packages for filtering, organizing, and visualizing, using the `gapminder` dataset as an example. 
 
 # Load Libraries
+First, we need to load the required libraries (install the packages beforehand if necessary).
 
 ```{r libraries}
 suppressPackageStartupMessages(library(gapminder))
@@ -15,7 +18,7 @@ suppressPackageStartupMessages(library(ggplot2))
 ```
 
 # Exploration Tasks
-We will use the following sections to demonstrate a few common tasks used in data exploration. The will provide a useful reference for future work. 
+The following sections demonstrate a number of common tasks used in data exploration providing a useful reference for future work. 
 
 ###1. Get the maximum and minimum of GDP per capita for all continents
 
@@ -32,17 +35,20 @@ GDPmm <- gapminder %>% # begin pipe and assign output to variable "GDP"
 knitr::kable(GDPmm)
 ```
 
-Plot using a barchart
+Let's make two barcharts to better visualize these. 
+
+**Max GDP by Continent**
 
 ```{r barmax}
 ggplot(GDPmm, aes(continent, max.gdp))+
-  geom_bar(stat = "identity", position = "dodge")+
+  geom_bar(stat = "identity")+
   aes(color = continent, fill = continent)+
   xlab("Continent")+
   ylab("Maximum GDP per Capita")
   
 ```
 
+**Minimum GDP by Continent**
 ```{r barmin}
 ggplot(GDPmm, aes(continent, min.gdp))+
   geom_bar(stat = "identity")+
@@ -53,6 +59,8 @@ ggplot(GDPmm, aes(continent, min.gdp))+
 ```
 
 ###2. Look at the spread of GDP per capita within the continents
+To accompish this, we will filter the dataset and then apply a series of computations using the`summarize()` function:
+
 ```{r spread GDP}
 GDP_spread <- gapminder %>% 
   group_by(continent) %>% 
@@ -62,6 +70,9 @@ GDP_spread <- gapminder %>%
             )
 knitr::kable(GDP_spread)
 ```
+
+
+To visualize the spread of these data, we can use a boxplot:
 ```{r boxplot}
 gapminder %>% 
   group_by(continent) %>% 
@@ -72,41 +83,57 @@ gapminder %>%
   ggtitle("Gross Domestic Product per capita by Continent (1952-2007)")
 ```
 
-However, a violin plot will provide a better sense of the spread:
+The boxplot is useful, but a violin plot will provide a better visualization, since it shows all of the data points as well as the range:
 
 ```{r violin}
 gapminder %>% 
   group_by(continent) %>% 
   ggplot(aes(continent, gdpPercap))+
-  geom_jitter(aes(color = continent, alpha=0.1))+
   geom_violin(aes(color = continent))+
+  geom_jitter(aes(color = continent, alpha=0.1))+
   xlab("Continent")+
   ylab("GDP per capita")+
   ggtitle("Gross Domestic Product per capita by Continent (1952-2007)")
 ```
-
 Here we see that GDP per capita varies widely within continents. This is particularly true for Asia, which has a far more extreme range than any of the other continents. 
+
+One final adjustment to this chart would be to put the Y axis on a log10 scale, so that we can better visualize the data points that are clustered near the bottom:
+
+```{r violin_log}
+gapminder %>% 
+  group_by(continent) %>% 
+  ggplot(aes(continent, gdpPercap))+
+  geom_violin(aes(color = continent))+
+  geom_jitter(aes(color = continent, alpha=0.1))+
+  scale_y_log10()+
+  xlab("Continent")+
+  ylab("GDP per capita")+
+  ggtitle("Gross Domestic Product per capita by Continent (1952-2007)")
+```
+**Note** There is a tradeoff between the log10 plot and the previous plot, in that the former makes the differences between the ranges less obvious, but has the advantage of showing the "shape" of the violins, which is not possible on the normal y-axis. The ultimate choice should be based on the message that is most important to communicate for the question at hand.
+
 
 ###3. How is life expectancy changing over time on different continents?
 
-For this question, we will first:
+For this question, we will group and summarize the data, and then compute the mean life expectancy, weighted by population:
 
 ```{r lifexp}
 lexp <- gapminder %>% 
-  group_by(continent, year) %>%
-  summarize(mean.lexp = mean(lifeExp)) %>% 
-  arrange(year)
-knitr::kable(lexp)  
-
-  
+  group_by(continent, year) %>% #group by continent and year
+  summarize(wmean.lexp = weighted.mean(lifeExp,pop)) %>% #weighted mean by population
+  arrange(year) #arrange in ascending order by year
+knitr::kable(lexp)  #output to table
 ```
+
+The above table provides all of the data, but is not easy to use for picking out patterns. Let's plot the data throught time:
+
 ```{r lexp_time}
-ggplot(data = lexp, aes(x = year, y = mean.lexp))+
+ggplot(data = lexp, aes(x = year, y = wmean.lexp))+ 
   geom_line(aes(color = continent))+
   geom_point(aes(color = continent))+
   xlab("Year")+
   ylab("Mean Life Expactany")+
-  ggtitle("Mean Life Expectancy by Continent (1952-2007)")
+  ggtitle("Mean Life Expectancy by Continent, Weighted by Population (1952-2007)")
 ```
 
 
