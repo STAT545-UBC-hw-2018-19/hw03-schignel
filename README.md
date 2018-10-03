@@ -5,8 +5,8 @@ Welcome to the repository! Here you'll find all the files and associated materia
 
 You can access these by navigating the directory above, or use the following shorcuts:
 
-- Markdown (.md) file
-- R Markdown (.Rmd) file
+- [Markdown (.md) file](https://github.com/STAT545-UBC-students/hw03-schignel/blob/master/hw03-schignel.md)
+- [R Markdown (.Rmd) file](https://github.com/STAT545-UBC-students/hw03-schignel/blob/master/hw03-schignel.Rmd)
 
 
 ![](https://www.picgifs.com/graphics/w/welcome/graphics-welcome-750656.gif)
