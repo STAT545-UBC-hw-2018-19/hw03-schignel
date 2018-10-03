@@ -140,8 +140,6 @@ ggplot(data = lexp, aes(x = year, y = wmean.lexp))+
 
 Here we see that on average, life expectancy has been increasing from 1952 to 2007. The one exception is Africa, which has remained relatively level from 1987 until a slight increase in 2007. 
 
-Also, it is interesting to see that there are no crossing of the continenents; they each remain in the same rank as they started in. 
-
-
+Also, it is interesting to see that there is no crossing of continent rankings. In other words, each continent remains in the same relative position throughout the entire data record.
 
 
